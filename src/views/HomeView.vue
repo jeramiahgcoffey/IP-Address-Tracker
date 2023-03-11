@@ -32,24 +32,23 @@
 </template>
 
 <script>
-import IPInfo from '@/components/IPInfo.vue'
-import leaflet from 'leaflet'
-import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import IPInfo from '@/components/IPInfo.vue';
+import leaflet from 'leaflet';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
 export default {
   name: 'HomeView',
   components: {
     IPInfo,
   },
   setup() {
-    // create map variable
-    let mymap
-    // Data variables
-    const queryIp = ref('')
-    const ipInfo = ref(null)
-    // mounted lifecycle hook, creates the map
-    onMounted(() => {
-      mymap = leaflet.map('mapid').setView([42.5145, -83.0147], 9)
+    let mymap;
+
+    const queryIp = ref('');
+    const ipInfo = ref(null);
+
+    onMounted(async () => {
+      mymap = leaflet.map('mapid').setView([42.5145, -83.0147], 9);
       leaflet
         .tileLayer(
           'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamVyYW1pYWhjb2ZmZXkiLCJhIjoiY2wzajJvbWNmMDFsbDNjbng0aHNub3pvcSJ9.77z3nre-klKmmTa5mokpIg',
@@ -64,15 +63,17 @@ export default {
               'pk.eyJ1IjoiamVyYW1pYWhjb2ZmZXkiLCJhIjoiY2wzajJvbWNmMDFsbDNjbng0aHNub3pvcSJ9.77z3nre-klKmmTa5mokpIg',
           }
         )
-        .addTo(mymap)
-    })
+        .addTo(mymap);
+
+      await getIpInfo();
+    });
 
     const getIpInfo = async () => {
       try {
         const res = await axios.get(
           `https://geo.ipify.org/api/v2/country,city?apiKey=at_nqxga0TSRJ7dyZbsm66KTWwYIvS3W&ipAddress=${queryIp.value}`
-        )
-        const data = res.data
+        );
+        const data = res.data;
         ipInfo.value = {
           address: data.ip,
           state: data.location.region,
@@ -80,20 +81,20 @@ export default {
           isp: data.isp,
           lat: data.location.lat,
           lng: data.location.lng,
-        }
-        leaflet.marker([ipInfo.value.lat, ipInfo.value.lng]).addTo(mymap)
-        mymap.setView([ipInfo.value.lat, ipInfo.value.lng], 13)
+        };
+        leaflet.marker([ipInfo.value.lat, ipInfo.value.lng]).addTo(mymap);
+        mymap.setView([ipInfo.value.lat, ipInfo.value.lng], 13);
       } catch (error) {
         if (error.response.status === 422) {
-          alert('Please enter a valid IP address')
+          alert('Please enter a valid IP address');
         } else {
-          console.log(error)
-          alert(error.message)
+          console.log(error);
+          alert(error.message);
         }
       }
-    }
+    };
 
-    return { queryIp, ipInfo, getIpInfo }
+    return { queryIp, ipInfo, getIpInfo };
   },
-}
+};
 </script>
