@@ -13,9 +13,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(
-    'https://jeramiahgcoffey.github.io/IP-Address-Tracker/'
-  ),
+  history: createWebHistory('/'),
   routes,
 });
 
