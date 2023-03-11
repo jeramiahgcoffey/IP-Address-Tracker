@@ -88,7 +88,6 @@ export default {
         if (error.response.status === 422) {
           alert('Please enter a valid IP address');
         } else {
-          console.log(error);
           alert(error.message);
         }
       }
