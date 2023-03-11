@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
 
 const routes = [
   {
@@ -10,16 +10,18 @@ const routes = [
       title: 'IP Address Tracker',
     },
   },
-]
+];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(
+    'https://jeramiahgcoffey.github.io/IP-Address-Tracker/'
+  ),
   routes,
-})
+});
 
 router.beforeEach((to, from, next) => {
-  document.title = `${to.meta.title}`
-  next()
-})
+  document.title = `${to.meta.title}`;
+  next();
+});
 
-export default router
+export default router;
